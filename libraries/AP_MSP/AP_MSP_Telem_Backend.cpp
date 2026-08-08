@@ -1140,25 +1140,21 @@ MSPCommandResult AP_MSP_Telem_Backend::msp_process_out_rtc(sbuf_t *dst)
 #if AP_RC_CHANNEL_ENABLED
 MSPCommandResult AP_MSP_Telem_Backend::msp_process_out_rc(sbuf_t *dst)
 {
-    float roll = rc().get_roll_channel().norm_input_dz();
-    float pitch = -rc().get_pitch_channel().norm_input_dz();
-    float yaw = rc().get_yaw_channel().norm_input_dz();
-    float throttle = rc().get_throttle_channel().norm_input_dz();
+    uint16_t channels[NUM_RC_CHANNELS] {};
 
-    const struct PACKED {
-        uint16_t a;
-        uint16_t e;
-        uint16_t r;
-        uint16_t t;
-    } rc {
-        // send only 4 channels, MSP order is AERT
-        a : uint16_t(roll*500+1500),       // A
-        e : uint16_t(pitch*500+1500),      // E
-        r : uint16_t(yaw*500+1500),        // R
-        t : uint16_t(throttle*1000+1000)    // T
-    };
+    const uint8_t channel_count =
+        rc().get_radio_in(channels, NUM_RC_CHANNELS);
 
-    sbuf_write_data(dst, &rc, sizeof(rc));
+    if (channel_count == 0) {
+        return MSP_RESULT_ACK;
+    }
+
+    sbuf_write_data(
+        dst,
+        channels,
+        channel_count * sizeof(channels[0])
+    );
+
     return MSP_RESULT_ACK;
 }
 #endif  // AP_RC_CHANNEL_ENABLED
