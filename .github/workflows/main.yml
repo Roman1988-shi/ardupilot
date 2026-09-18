@@ -1,4 +1,4 @@
-name: Build speedebeef4v3 ArduCopter
+name: Build speedybeef4v3 ArduCopter
 
 on:
   workflow_dispatch:
@@ -22,7 +22,7 @@ jobs:
       - name: Configure speedybeef4v3
         run: |
           source ~/.profile
-          ./waf configure --board speedebeef4v3
+          ./waf configure --board speedybeef4v3
 
       - name: Build ArduCopter
         run: |
