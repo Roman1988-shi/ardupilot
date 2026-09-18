@@ -1,4 +1,4 @@
-name: Build MatekH743 ArduCopter
+name: Build speedebeef4v3 ArduCopter
 
 on:
   workflow_dispatch:
@@ -19,10 +19,10 @@ jobs:
           Tools/environment_install/install-prereqs-ubuntu.sh -y
           echo "$HOME/.local/bin" >> $GITHUB_PATH
 
-      - name: Configure MatekH743
+      - name: Configure speedybeef4v3
         run: |
           source ~/.profile
-          ./waf configure --board MatekH743
+          ./waf configure --board speedebeef4v3
 
       - name: Build ArduCopter
         run: |
@@ -32,6 +32,6 @@ jobs:
       - name: Upload firmware
         uses: actions/upload-artifact@v4
         with:
-          name: MatekH743-ArduCopter-MSP-RC16
+          name: speedybeef4v3-ArduCopter-MSP-RC16
           path: |
-            build/MatekH743/bin/arducopter.apj
+            build/speedybeef4v3/bin/arducopter.apj
